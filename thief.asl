@@ -4,6 +4,7 @@ state("Thief", "tg od")
 	int loading : "thief.exe", 0x2467D0;
     int menuState : "thief.exe", 0x279090;
 	int igt : "thief.exe", 0x244238;
+	string255 cutsceneName : "thief.exe", 0x24CB60;
 }
 
 state("Thief", "tg nd")
@@ -12,6 +13,7 @@ state("Thief", "tg nd")
 	int loading: "thief.exe", 0x3D89B0;
 	int menuState : "thief.exe", 0x3D8808;
 	int igt : "thief.exe", 0x4C6234;
+	string255 cutsceneName : "thief.exe", 0x5CF9DE;
 }
 
 state("Thief", "tdp od")
@@ -20,6 +22,7 @@ state("Thief", "tdp od")
 	int loading: "thief.exe", 0x246700;
 	int menuState : "thief.exe", 0x278FC0;
 	int igt : "thief.exe", 0x244168;
+	string255 cutsceneName : "thief.exe", 0x24CA59;
 }
 
 state("Thief", "tdp nd")
@@ -28,6 +31,7 @@ state("Thief", "tdp nd")
 	int loading: "thief.exe", 0x3D89B0;
 	int menuState : "thief.exe", 0x3D8808;
 	int igt : "thief.exe", 0x4C6234;
+	string255 cutsceneName : "thief.exe", 0x5CF9DE;
 }
 
 init
@@ -119,7 +123,12 @@ split
 	}
 	else if ((settings["normal"] && current.Level > 1) || (settings["expert"] && current.Level > 2)){
 		if (current.Level == 14){
-			return ((vars.splits[current.Level] == old.Level) || (current.Level == 14 && current.menuState == 12));
+			if (settings["tg nd"] || settings["tdp nd"]){
+				return ((vars.splits[current.Level] == old.Level) || (current.Level == 14 && current.menuState == 12 && current.cutsceneName == "success"));
+			}
+			else if (settings["tg od"] || settings["tdp od"]){
+				return ((vars.splits[current.Level] == old.Level) || (current.Level == 14 && current.menuState == 12 && current.cutsceneName == "success.avi"));
+			}
 		}
 		return (vars.splits[current.Level] == old.Level);
 	}
