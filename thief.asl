@@ -53,28 +53,18 @@ init
 		version = "tdp od";
 	}
 	
+	vars.levelTracker = 0;
 	if (settings["tdp nd"] || settings["tdp od"]){
-		vars.splits = new Dictionary<int, int> {
-		{3, 2}, {4, 3}, {5, 4},
-		{6, 5}, {7, 6}, {9, 8},
-		{10, 9}, {11, 10}, {12, 11},
-		{13, 12}, {14, 13}
-		};
+		vars.order = new List<int> {2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14};
 	}
 	else if (settings["tg nd"] || settings["tg od"]){
-		vars.splits = new Dictionary<int, int> {
-		{3, 2}, {4, 3}, {5, 4},
-		{15, 5}, {6, 15}, {7, 6},
-		{16, 7}, {9, 16}, {17, 9},
-		{10, 17}, {11, 10}, {12, 11},
-		{13, 12}, {14, 13}
-		};
+		vars.order = new List<int> {2, 3, 4, 5, 15, 6, 7, 16, 9, 17, 10, 11, 12, 13, 14};
 	}
 	else {
-		vars.splits = new Dictionary<int, int>();
+		vars.order = new List<int>();
 	}
 	if (settings["normal"]){
-		vars.splits.Add(2, 1);
+		vars.order.Insert(0, 1);
 	}
 }
 
@@ -87,32 +77,24 @@ startup
 	settings.Add("normal", false, "Fullgame Normal");
 	settings.Add("expert", false, "Fullgame Expert");
 	settings.Add("il", false, "Individual Level");
-	vars.levelsComplete = 0;
 }
 
 // Starts the timer when you load into Keeper's
 start 
 {
-	if (settings["normal"]){
-		return (current.Level == 1 && (current.menuState == 10));
-	}
-	else if (settings["expert"]){
-		return (current.Level == 2 && (current.menuState == 10));
-	}
-	else if (settings["il"]){
+	if (settings["il"]){
 		return (current.igt != 0);
+	}
+	else if ((settings["normal"] || settings["expert"]) && current.Level == vars.order[0]){
+		vars.levelTracker = 0;
+		return (current.menuState == 10);
 	}
 }
 
 // Reset splits when starting new run. Doesn't reset a finished run
 reset 
 {
-	if (settings["normal"]){
-		return (current.Level == 1 && old.Level != 1);
-	}
-	else if (settings["expert"]){
-		return (current.Level == 2 && old.Level != 2);
-	}
+	return (current.Level == vars.order[0] && old.Level != vars.order[0]);
 }
 
 // Splits at the end of each level and on maw end cutscene
@@ -121,17 +103,13 @@ split
 	if (settings["il"]){
 		return (current.igt == old.igt && current.menuState == 12);
 	}
-	else if ((settings["normal"] && current.Level > 1) || (settings["expert"] && current.Level > 2)){
-		if (current.Level == 14){
-			if (settings["tg nd"] || settings["tdp nd"]){
-				return ((vars.splits[current.Level] == old.Level) || (current.Level == 14 && current.menuState == 12 && current.cutsceneName == "success"));
-			}
-			else if (settings["tg od"] || settings["tdp od"]){
-				return ((vars.splits[current.Level] == old.Level) || (current.Level == 14 && current.menuState == 12 && current.cutsceneName == "success.avi"));
-			}
+	else if (settings["normal"] || settings["expert"]){
+		if (current.Level == vars.order[vars.levelTracker] && current.menuState == 12 && (current.cutsceneName == "success" || current.cutsceneName == "success.avi")){
+			vars.levelTracker += 1;
+			return true;
 		}
-		return (vars.splits[current.Level] == old.Level);
 	}
+	return false;
 }
 
 // Returns true if loading or in briefing cutscenes
