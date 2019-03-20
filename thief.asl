@@ -42,12 +42,9 @@ start{
 	if (settings["il"]){
 		return (current.igt != 0);
 	}
-	else if (settings["normal"] && current.Level == vars.order[0]){
-		vars.levelTracker = 0;
-		return (current.menuState == 10 && current.loading != 0);
-	}
-	else if (settings["expert"] && current.Level == vars.order[1]){
-		vars.levelTracker = 1;
+	else if ((settings["normal"] && current.Level == vars.order[0])
+			|| (settings["expert"] && current.Level == vars.order[1])){
+		vars.levelTracker = current.Level - 1;
 		return (current.menuState == 10 && current.loading != 0);
 	}
 }
