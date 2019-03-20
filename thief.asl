@@ -29,9 +29,7 @@ init{
 	version = modules.First().FileVersionInfo.ProductVersion;
 	
 	vars.levelTracker = 0;
-	vars.tg_missions = false;
-	vars.order_tdp = new List<int> {1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14};
-	vars.order_tg = new List<int> {1, 2, 3, 4, 5, 15, 6, 7, 16, 9, 17, 10, 11, 12, 13, 14};
+	vars.order = new List<int> {1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14};
 }
 
 startup{
@@ -44,11 +42,11 @@ start{
 	if (settings["il"]){
 		return (current.igt != 0);
 	}
-	else if (settings["normal"] && current.Level == vars.order_tg[0]){
+	else if (settings["normal"] && current.Level == vars.order[0]){
 		vars.levelTracker = 0;
 		return (current.menuState == 10 && current.loading != 0);
 	}
-	else if (settings["expert"] && current.Level == vars.order_tg[1]){
+	else if (settings["expert"] && current.Level == vars.order[1]){
 		vars.levelTracker = 1;
 		return (current.menuState == 10 && current.loading != 0);
 	}
@@ -56,21 +54,16 @@ start{
 
 split{
 	if (current.Level == 15){
-		vars.tg_missions = true;
+		vars.order = new List<int> {1, 2, 3, 4, 5, 15, 6, 7, 16, 9, 17, 10, 11, 12, 13, 14};
 	}
 	
 	if (settings["il"]){
 		return (current.igt == old.igt && current.menuState == 12);
 	}
-	else if ((settings["normal"] || settings["expert"])){
-		bool split = false;
-		if (current.menuState == 12 && (current.cutsceneName == "success" || current.cutsceneName.Substring(current.cutsceneName.Length-11, 11) == "success.avi")){
-			if ((vars.tg_missions && current.Level == vars.order_tg[vars.levelTracker])
-					|| (!vars.tg_missions && current.Level == vars.order_tdp[vars.levelTracker])){
-				vars.levelTracker += 1;
-				return true;
-			}
-		}
+	else if ((settings["normal"] || settings["expert"]) && current.menuState == 12
+			&& current.Level == vars.order[vars.levelTracker] && current.cutsceneName.Contains("success")){
+		vars.levelTracker += 1;
+		return true;
 	}
 }
 
