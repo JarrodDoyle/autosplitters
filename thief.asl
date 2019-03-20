@@ -40,7 +40,7 @@ startup{
 
 start{
 	if (settings["il"]){
-		return (current.igt != 0);
+		return (current.igt == 0 && current.menuState == 10);
 	}
 	else if ((settings["normal"] && current.Level == vars.order[0])
 			|| (settings["expert"] && current.Level == vars.order[1])){
