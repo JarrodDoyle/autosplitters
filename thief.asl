@@ -1,3 +1,14 @@
+// IMPORTANT
+// The splitter currently only works for OD versions 1.33 and 1.33 and ND version 1.22 (TFix 1.20a)
+//
+// CREDITS:
+// Jayrude - Code and testing
+// Psych0sis - Finding memory addresses and testing
+// Skejven - Testing with weird dodgy Polish version
+// Black secret - Testing with GoG version
+// OneginIII - Testing
+// TheAmorphousGamer - Testing
+
 // TG OD
 state("Thief", "1.37"){
 	int Level : "thief.exe", 0x279088;
