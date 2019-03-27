@@ -70,3 +70,7 @@ split{
 isLoading{
 	return ((current.loading != 0 && current.menuState != 9) || current.menuState == 6 || current.menuState == 12);
 }
+
+gameTime{
+	if (settings["il"]) return TimeSpan.FromMilliseconds(current.igt);
+}
