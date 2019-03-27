@@ -39,13 +39,12 @@ state("Thief", "1.22"){
 init{
 	version = modules.First().FileVersionInfo.ProductVersion;
 	
+	vars.category = timer.Run.CategoryName.ToLower();
 	vars.levelTracker = 0;
 	vars.order = new List<int> {1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14};
 }
 
 startup{
-	settings.Add("normal", false, "Normal Mode");
-	settings.Add("expert", false, "Expert Mode");
 	settings.Add("il", false, "ILs");
 }
 
@@ -53,11 +52,9 @@ start{
 	if (settings["il"]){
 		return (current.igt == 0 && current.menuState == 10);
 	}
-	else if ((settings["normal"] && current.Level == vars.order[0])
-			|| (settings["expert"] && current.Level == vars.order[1])){
-		vars.levelTracker = current.Level - 1;
-		return (current.menuState == 10 && current.loading != 0);
-	}
+	vars.levelTracker = 0;
+	if (vars.category == "any% expert") vars.levelTracker += 1;
+	return (current.Level == vars.order[vars.levelTracker] && current.menuState == 10 && current.loading != 0);
 }
 
 split{
@@ -68,8 +65,7 @@ split{
 	if (settings["il"]){
 		return (current.igt == old.igt && current.menuState == 12);
 	}
-	else if ((settings["normal"] || settings["expert"]) && current.menuState == 12
-			&& current.Level == vars.order[vars.levelTracker] && current.cutsceneName.Contains("success")){
+	if (current.menuState == 12 && current.Level == vars.order[vars.levelTracker] && current.cutsceneName.Contains("success")){
 		vars.levelTracker += 1;
 		return true;
 	}
