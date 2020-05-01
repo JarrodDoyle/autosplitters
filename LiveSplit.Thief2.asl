@@ -1,6 +1,3 @@
-// IMPORTANT
-// The splitter currently only works for OD versions 1.33 and 1.33 and ND version 1.22 (TFix 1.20a)
-//
 // CREDITS:
 // Jayrude - Code and testing
 // Psych0sis - Finding memory addresses and testing
