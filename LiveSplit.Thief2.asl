@@ -54,7 +54,7 @@ state("Thief2", "1.26"){
 }
 
 // NewDark 1.27
-state("Thief" | "Thief2", "1.27"){
+state("Thief2", "1.27"){
 	int level : "thief2.exe", 0x3DF0C8;
 	int loading: "thief2.exe", 0x3DF278;
 	int menuState : "thief2.exe", 0x3DF0D0;
@@ -80,11 +80,18 @@ start{
 }
 
 split{
-	if (settings["il"]) return (current.igt == old.igt && current.menuState == 12);
+	if (settings["il"]) return (current.menuState == 13);
 	if (current.menuState == 12 && current.level == vars.splits[vars.splitsIndex] && current.cutsceneName.Contains("success")){
 		vars.splitsIndex += 1;
 		return true;
 	}
+}
+
+reset{
+	if (settings["il"]){
+		return (current.menuState == 7 || current.menuState == 9);
+	}
+	return (current.level == vars.splits[0] && current.menuState == 7);
 }
 
 isLoading{
