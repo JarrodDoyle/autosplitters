@@ -1,65 +1,55 @@
-// CREDITS:
-// Jayrude - Code and testing
-// Psych0sis - Finding memory addresses and testing
-// DanPC - Found memory addresses for "Find Constantine" objective
-// Skejven - Testing with weird dodgy Polish version
-// Black secret - Testing with GoG version
-// OneginIII - Testing
-// TheAmorphousGamer - Testing
-
-
 // NewDark 1.21
 state("Thief2", "1.21"){
-	int level : "thief2.exe", 0x3BFEE0;
-	int loading: "thief2.exe", 0x3C0090;
-	int menuState : "thief2.exe", 0x3BFEE8;
-	int igt : "thief2.exe", 0x4AD700;
-	string255 cutsceneName : "thief2.exe", 0x39FD40, 0x1B0, 0x8, 0x38, 0x28, 0x68;
+	int level 				: 0x3BFEE0;
+	int loading				: 0x3C0090;
+	int menuState 			: 0x3BFEE8;
+	int igt 				: 0x4AD700;
+	string255 cutsceneName 	: 0x5BB818, 0x458, 0x14, 0x4, 0x4, 0x24, 0x68;
 }
 
 // NewDark 1.22
 state("Thief2", "1.22"){
-	int level : "thief2.exe", 0x3D8800;
-	int loading: "thief2.exe", 0x3D89B0;
-	int menuState : "thief2.exe", 0x3D8808;
-	int igt : "thief2.exe", 0x4C6234;
-	string255 cutsceneName : "thief2.exe", 0x5CF9DE;
+	int level 				: 0x3D8800;
+	int loading				: 0x3D89B0;
+	int menuState 			: 0x3D8808;
+	int igt 				: 0x4C6234;
+	string255 cutsceneName 	: 0x5CF9DE;
 }
 
 // NewDark 1.24
 state("Thief2", "1.24"){
-	int level : "thief2.exe", 0x3DCB80;
-	int loading: "thief2.exe", 0x3DCD30;
-	int menuState : "thief2.exe", 0x3DCB88;
-	int igt : "thief2.exe", 0x4CA9D8;
-	string255 cutsceneName : "thief2.exe", 0x5D4FEE;
+	int level 				: 0x3DCB80;
+	int loading				: 0x3DCD30;
+	int menuState 			: 0x3DCB88;
+	int igt 				: 0x4CA9D8;
+	string255 cutsceneName 	: 0x5D4FE8;
 }
 
 // NewDark 1.25
 state("Thief2", "1.25"){
-	int level : "thief2.exe", 0x3DDB90;
-	int loading: "thief2.exe", 0x3DDD40;
-	int menuState : "thief2.exe", 0x3DDB98;
-	int igt : "thief2.exe", 0x4CBA98;
-	string255 cutsceneName : "thief2.exe", 0x5DB0C6;
+	int level 				: 0x3DDB90;
+	int loading				: 0x3DDD40;
+	int menuState 			: 0x3DDB98;
+	int igt 				: 0x4CBA98;
+	string255 cutsceneName 	: 0x5DB0C0;
 }
 
 // NewDark 1.26
 state("Thief2", "1.26"){
-	int level : "thief2.exe", 0x3DE0C8;
-	int loading: "thief2.exe", 0x3DE278;
-	int menuState : "thief2.exe", 0x3DE0D0;
-	int igt : "thief2.exe", 0x4CC138;
-	string255 cutsceneName : "thief2.exe", 0x5DB976;
+	int level 				: 0x3DE0C8;
+	int loading				: 0x3DE278;
+	int menuState 			: 0x3DE0D0;
+	int igt 				: 0x4CC138;
+	string255 cutsceneName 	: 0x5DB970;
 }
 
 // NewDark 1.27
 state("Thief2", "1.27"){
-	int level : "thief2.exe", 0x3DF0C8;
-	int loading: "thief2.exe", 0x3DF278;
-	int menuState : "thief2.exe", 0x3DF0D0;
-	int igt : "thief2.exe", 0x4CD178;
-	string255 cutsceneName : "thief2.exe", 0x5DC9BE;
+	int level 				: 0x3DF0C8;
+	int loading				: 0x3DF278;
+	int menuState 			: 0x3DF0D0;
+	int igt 				: 0x4CD178;
+	string255 cutsceneName 	: 0x5DC9B8;
 }
 
 init{
@@ -81,7 +71,7 @@ start{
 
 split{
 	if (settings["il"]) return (current.menuState == 13);
-	if (current.menuState == 12 && current.level == vars.splits[vars.splitsIndex] && current.cutsceneName.Contains("success")){
+	if (current.menuState == 12 && current.level == vars.splits[vars.splitsIndex] && (current.cutsceneName.Contains("success") || current.cutsceneName.Contains("cs10"))){
 		vars.splitsIndex += 1;
 		return true;
 	}
